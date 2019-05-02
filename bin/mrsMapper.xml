@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- MrsMapper.java와 매핑 -->
+<mapper namespace="mrs.dao.MrsMapper">
+
+	<!-- SQL 쿼리문 정의 -->
+	<!-- JAVA 인터페이스가 특정 SQL문을 찾으려면 id가 꼭 필요함 -->
+	<!-- 문장 종결 문자 ';'가 들어가면 안됨 (에러 발생) -->
+	
+	<!-- 모든 계정 정보를 반환 -->
+	<select id="getAccountAll" resultType="Account">
+		SELECT
+			account_id as "id"
+			, account_pw as "password"
+			, account_name as "userName"
+			, account_tel as "tel"
+			, manager_email as "email"
+			, member_birth as "birth"
+			, member_mileage as "mileage"
+			, account_is_admin as "isAdmin"
+		FROM
+			account
+	</select>
+	
+	<!-- 모든 상영관 정보를 반환 -->
+	<select id="getATheaterAll" resultType="Theater">
+		SELECT
+			theater_name as "theaterName"
+			, theater_seating_chart_type as "theaterType"
+		FROM
+			theater
+	</select>
+	
+	<!-- 아이디로 특정 계정을 찾아 반환함 -->
+	<select id="searchAccountForId" resultType="Account">
+		SELECT
+			account_id as "id"
+			, account_pw as "password"
+			, account_name as "userName"
+			, account_tel as "tel"
+			, manager_email as "email"
+			, member_birth as "birth"
+			, member_mileage as "mileage"
+			, account_is_admin as "isAdmin"
+		FROM
+			account
+		WHERE
+			account_id = #{id}
+	</select>
+	
+	<!-- 상영관 이름으로 상영관을 찾아 반환함 -->
+	<select id="searchTheaterForTheaterName" resultType="Theater">
+		SELECT
+			theater_name as "theaterType"
+			, theater_seating_chart_type as "theaterType"
+		FROM
+			theater
+		WHERE
+			theater_name = #{theaterName}
+	</select>
+	
+	<!-- 회원 계정 하나를 생성하여 DB에 추가함 -->
+	<insert id="insertMember" parameterType="Account">
+		INSERT INTO account VALUES (
+			#{id}
+			, #{password}
+			, #{userName}
+			, #{tel}
+			, null
+			, #{birth}
+			, #{mileage}
+			, 'N'
+		)
+	</insert>
+	
+	<!-- 관리자 계정 하나를 생성하여 DB에 추가함 -->
+	<insert id="insertManager" parameterType="Account">
+		INSERT INTO account VALUES (
+			#{id}
+			, #{password}
+			, #{userName}
+			, #{tel}
+			, #{email}
+			, null
+			, null
+			, 'Y'
+		)
+	</insert>
+	
+	<!-- 상영관 정보를 DB에 추가함 -->
+	<insert id="insertTheater" parameterType="Theater">
+		INSERT INTO theater VALUES (
+			#{theaterName}
+			, #{theaterType}
+		)
+	</insert>
+	
+	<!-- 해당 아이디의 계정을 찾아 삭제함 -->
+	<delete id="deleteAccount" parameterType="String">
+		DELETE account WHERE account_id = #{id}
+	</delete>
+	
+	<!-- 해당 이름의 상영관을 찾아 삭제함 -->
+	<delete id="deleteTheater" parameterType="String">
+		DELETE theater WHERE theater_name = #{theaterName}
+	</delete>
+
+</mapper>
